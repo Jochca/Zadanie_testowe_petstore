@@ -12,13 +12,13 @@ use Illuminate\View\View;
 class PetController extends Controller
 {
     public function __construct(
-        private PetService $petStoreAPIGatewayService,
+        private PetService $petService,
     ){}
 
     public function index(PetIndexRequest $request) : View
     {
         try{
-            $pets = $this->petStoreAPIGatewayService->index($request->status);
+            $pets = $this->petService->index($request->status);
         } catch (\Exception $e) {
             return view('pets.index', [
                 'pets' => [],
@@ -28,14 +28,13 @@ class PetController extends Controller
 
         return view('pets.index', [
             'pets' => $pets,
-            'action' => 'index',
         ]);
     }
 
     public function store(PetStoreRequest $request) : View
     {
         try{
-            $pet = $this->petStoreAPIGatewayService->store($request->toDTO());
+            $pet = $this->petService->store($request->toDTO());
         } catch (\Exception $e) {
             return view('pets.index', [
                 'pets' => [],
@@ -45,14 +44,14 @@ class PetController extends Controller
 
         return view('pets.index', [
             'pets' => [$pet],
-            'action' => 'store',
+            'message' => 'Pet created successfully!',
         ]);
     }
 
     public function update(PetUpdateRequest $request) : View
     {
         try{
-            $pet = $this->petStoreAPIGatewayService->update($request->toDTO());
+            $pet = $this->petService->update($request->toDTO());
         } catch (\Exception $e) {
             return view('pets.index', [
                 'pets' => [],
@@ -62,7 +61,23 @@ class PetController extends Controller
 
         return view('pets.index', [
             'pets' => [$pet],
-            'action' => 'update',
+            'message' => 'Pet updated successfully!',
+        ]);
+    }
+
+    public function destroy(Request $request) : View
+    {
+        try{
+            $this->petService->destroy($request->id);
+        } catch (\Exception $e) {
+            return view('pets.index', [
+                'pets' => [],
+                'ApiError' => true,
+            ]);
+        }
+
+        return view('pets.index', [
+            'message' => 'Pet deleted successfully!',
         ]);
     }
 }

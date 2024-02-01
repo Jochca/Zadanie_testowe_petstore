@@ -6,9 +6,8 @@ return [
         'pets' => [
             'index' => 'pet/findByStatus',
             'store' => 'pet',
-            'show' => 'pet/{petId}',
             'update' => 'pet',
-            'destroy' => 'pet/{petId}',
+            'destroy' => 'pet',
         ],
     ],
 ];

@@ -93,4 +93,13 @@ class PetService
 
         return $this->responseToDTO($response);
     }
+
+    public function destroy(int $id) : void
+    {
+        try{
+            $this->petStoreAPIService->sendRequest(method: 'DELETE', endpoint: config('petstore.endpoints.pets.destroy'). "/$id");
+        } catch (RequestExceptionInterface | NetworkExceptionInterface | ClientExceptionInterface $e) {
+            throw $e;
+        }
+    }
 }
